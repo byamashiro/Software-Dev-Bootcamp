@@ -12,12 +12,33 @@ services:
     volumes:
       - .:/home/jovyan/app  # COPY current directory to /home/jovyan/app in the container
     working_dir: /home/jovyan/app  # Set working directory inside the container
+    container_name: my-jupyter-instance
+
     environment:
       FOO: bar  # Example environment variable
+      TZ: 'America/New_York'
     # The following is optional, but useful for Jupyter
     command: start-notebook.sh --NotebookApp.token=''  # Start Jupyter without a token
     networks:
       - my-network  # Connect to a custom network
+
+  # producer:
+  #   image: "redis:6.0-alpine"
+  #   container_name: my-redis-producer
+  #   ports:
+  #     - "6379:6379"
+  #   networks:
+  #     - my-network  # Connect to a custom network
+
+  producer:
+    build:
+      context: producer # ./producer # this must point to the folder with your Dockerfile
+      dockerfile: Dockerfile
+    container_name: my-producer
+    networks:
+      - my-network
+    depends_on:
+      - redis
 
   # Compose is very useful to run multiple services together
   # Here is an example of a simple Redis service
@@ -28,6 +49,8 @@ services:
       - "6379:6379"
     networks:
       - my-network  # Connect to a custom network
+
+
 
 networks:
   my-network:

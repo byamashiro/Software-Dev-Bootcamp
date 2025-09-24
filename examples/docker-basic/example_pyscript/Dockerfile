@@ -12,7 +12,7 @@ RUN pip install -r requirements.txt
 
 # Copy your application code into the container (5)
 # This copies 'app.py' from your current (host) directory into '/app' in the image
-COPY app.py .
+COPY nasafetch.py .
 
 # Command to run app.py when the container launches (6)
-CMD ["python", "app.py", "ls"]
+CMD ["python", "nasafetch.py", "ls"]
